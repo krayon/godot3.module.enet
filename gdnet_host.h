@@ -10,7 +10,7 @@
 #include "core/os/os.h"
 #include "core/reference.h"
 
-#include "penet/penet.h"
+#include "thirdparty/enet/enet/enet.h"
 
 #include "gdnet_address.h"
 #include "gdnet_event.h"
@@ -33,7 +33,7 @@ class GDNetHost : public Reference {
 		DEFAULT_MAX_CHANNELS = 1,
 	};
 
-	PENetHost* _host;
+	ENetHost* _host;
 	volatile bool _running;
 	Thread* _thread;
 	Mutex* _accessMutex;
@@ -59,8 +59,8 @@ class GDNetHost : public Reference {
 	void acquireMutex();
 	void releaseMutex();
 
-	int get_peer_id(PENetPeer *peer);
-	GDNetEvent* new_event(const PENetEvent& penet_event);
+	int get_peer_id(_ENetPeer *peer);
+	GDNetEvent* new_event(const ENetEvent& penet_event);
 
 protected:
 

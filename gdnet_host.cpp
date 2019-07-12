@@ -49,7 +49,7 @@ void GDNetHost::releaseMutex() {
 	_hostMutex->unlock();
 }
 
-int GDNetHost::get_peer_id(PENetPeer* peer) {
+int GDNetHost::get_peer_id(_ENetPeer* peer) {
 	return (int)(peer - _host->peers);
 }
 
@@ -61,11 +61,11 @@ void GDNetHost::send_messages() {
 
 		switch (message->get_type()) {
 			case GDNetMessage::UNSEQUENCED:
-				flags |= PENET_PACKET_FLAG_UNSEQUENCED;
+				flags |= ENET_PACKET_FLAG_UNSEQUENCED;
 				break;
 
 			case GDNetMessage::RELIABLE:
-				flags |= PENET_PACKET_FLAG_RELIABLE;
+				flags |= ENET_PACKET_FLAG_RELIABLE;
 				break;
 
 			default:
@@ -73,13 +73,14 @@ void GDNetHost::send_messages() {
 		}
 
 		PoolByteArray::Read r = message->get_packet().read();
-		PENetPacket * penet_packet = penet_packet_create(r.ptr(), message->get_packet().size(), flags);
+		_ENetPacket* enet_packet = enet_packet_create(r.ptr(), message->get_packet().size(), flags);
 
-		if (penet_packet != NULL) {
+		if (enet_packet != NULL) {
 			if (message->is_broadcast()) {
-				penet_host_broadcast(_host, message->get_channel_id(), penet_packet);
+				enet_host_broadcast(_host, message->get_channel_id(), enet_packet);
+				
 			} else {
-				penet_peer_send(&_host->peers[message->get_peer_id()], message->get_channel_id(), penet_packet);
+				enet_peer_send(&_host->peers[message->get_peer_id()], message->get_channel_id(), enet_packet);
 			}
 		}
 
@@ -87,40 +88,40 @@ void GDNetHost::send_messages() {
 	}
 }
 
-GDNetEvent* GDNetHost::new_event(const PENetEvent& penet_event) {
+GDNetEvent* GDNetHost::new_event(const ENetEvent& penet_event) {
 	GDNetEvent* event = memnew(GDNetEvent);
 
 	event->set_time(OS::get_singleton()->get_ticks_msec());
 	event->set_peer_id(get_peer_id(penet_event.peer));
 
 	switch (penet_event.type) {
-		case PENET_EVENT_TYPE_CONNECT: {
+		case ENET_EVENT_TYPE_CONNECT: {
 
 			event->set_event_type(GDNetEvent::CONNECT);
 			event->set_data(penet_event.data);
 
 		} break;
 
-		case PENET_EVENT_TYPE_RECEIVE: {
+		case ENET_EVENT_TYPE_RECEIVE: {
 
 			event->set_event_type(GDNetEvent::RECEIVE);
 			event->set_channel_id(penet_event.channelID);
 
-			PENetPacket* penet_packet = penet_event.packet;
+			ENetPacket* enet_packet = penet_event.packet;
 
 			PoolByteArray packet;
-			packet.resize(penet_packet->dataLength);
+			packet.resize(enet_packet->dataLength);
 
 			PoolByteArray::Write w = packet.write();
-			memcpy(w.ptr(), penet_packet->data, penet_packet->dataLength);
+			memcpy(w.ptr(), enet_packet->data, enet_packet->dataLength);
 
 			event->set_packet(packet);
 
-			penet_packet_destroy(penet_packet);
+			enet_packet_destroy(enet_packet);
 
 		} break;
 
-		case PENET_EVENT_TYPE_DISCONNECT: {
+		case ENET_EVENT_TYPE_DISCONNECT: {
 
 			event->set_event_type(GDNetEvent::DISCONNECT);
 			event->set_data(penet_event.data);
@@ -135,12 +136,12 @@ GDNetEvent* GDNetHost::new_event(const PENetEvent& penet_event) {
 }
 
 void GDNetHost::poll_events() {
-	PENetEvent event;
+	ENetEvent event;
 
-	if (penet_host_service(_host, &event, _event_wait) > 0) {
+	if (enet_host_service(_host, &event, _event_wait) > 0) {
 		_event_queue.push(new_event(event));
 
-		while (penet_host_check_events(_host, &event) > 0) {
+		while (enet_host_check_events(_host, &event) > 0) {
 			_event_queue.push(new_event(event));
 		}
 	}
@@ -169,23 +170,24 @@ Error GDNetHost::bind(Ref<GDNetAddress> addr) {
 	ERR_FAIL_COND_V(_host != NULL, FAILED);
 
 	if (addr.is_null()) {
-		_host = penet_host_create(NULL, _max_peers, _max_channels, _max_bandwidth_in, _max_bandwidth_out);
+		_host = enet_host_create(NULL, _max_peers, _max_channels, _max_bandwidth_in, _max_bandwidth_out);
 	} else {
 		CharString host_addr = addr->get_host().ascii();
 
-		PENetAddress penet_addr;
-		penet_addr.port = addr->get_port();
+		ENetAddress enet_addr;
+		enet_addr.port = addr->get_port();
 
 		if (host_addr.length() == 0) {
-			penet_addr.host = PENET_HOST_ANY;
+			// IPv6 ANY is represented by empty 128-bit buffer.
+			memset(enet_addr.host, 0, 16);
 		} else {
-			if (penet_address_set_host(&penet_addr, host_addr.get_data()) != 0) {
+			if (enet_address_set_host(&enet_addr, host_addr.get_data()) != 0) {
 				ERR_EXPLAIN("Unable to resolve host");
 				return FAILED;
 			}
 		}
 
-		_host = penet_host_create(&penet_addr, _max_peers, _max_channels, _max_bandwidth_in, _max_bandwidth_out);
+		_host = enet_host_create(&enet_addr, _max_peers, _max_channels, _max_bandwidth_in, _max_bandwidth_out);
 	}
 
 	ERR_FAIL_COND_V(_host == NULL, FAILED);
@@ -198,8 +200,8 @@ Error GDNetHost::bind(Ref<GDNetAddress> addr) {
 void GDNetHost::unbind() {
 	if (_host != NULL) {
 		thread_stop();
-		penet_host_flush(_host);
-		penet_host_destroy(_host);
+		enet_host_flush(_host);
+		enet_host_destroy(_host);
 		_host = NULL;
 		_message_queue.clear();
 		_event_queue.clear();
@@ -209,17 +211,17 @@ void GDNetHost::unbind() {
 Ref<GDNetPeer> GDNetHost::host_connect(Ref<GDNetAddress> addr, int data) {
 	ERR_FAIL_COND_V(_host == NULL, NULL);
 
-	PENetAddress penet_addr;
+	ENetAddress penet_addr;
 	penet_addr.port = addr->get_port();
 
 	CharString host_addr = addr->get_host().ascii();
 
-	if (penet_address_set_host(&penet_addr, host_addr.get_data()) != 0) {
+	if (enet_address_set_host(&penet_addr, host_addr.get_data()) != 0) {
 		ERR_EXPLAIN("Unable to resolve host");
 		return NULL;
 	}
 
-	PENetPeer* peer = penet_host_connect(_host, &penet_addr, _max_channels, data);
+	ENetPeer* peer = enet_host_connect(_host, &penet_addr, _max_channels, data);
 
 	ERR_FAIL_COND_V(peer == NULL, NULL);
 

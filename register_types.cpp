@@ -5,7 +5,7 @@
 #include "core/error_macros.h"
 #include "core/class_db.h"
 
-#include "penet/penet.h"
+#include "thirdparty/enet/enet/enet.h"
 
 #include "gdnet_address.h"
 #include "gdnet_event.h"
@@ -19,10 +19,10 @@ void register_gdnet3_types() {
 	ClassDB::register_class<GDNetHost>();
 	ClassDB::register_class<GDNetAddress>();
 
-	if (penet_initialize() != 0)
+	if (enet_initialize() != 0)
 		ERR_EXPLAIN("Unable to initialize PENet");
 }
 
 void unregister_gdnet3_types() {
-	penet_deinitialize();
+	enet_deinitialize();
 }

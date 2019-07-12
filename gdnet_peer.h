@@ -7,7 +7,7 @@
 #include "core/reference.h"
 #include "core/variant.h"
 
-#include "penet/penet.h"
+#include "thirdparty/enet/enet/enet.h"
 
 #include "gdnet_address.h"
 #include "gdnet_host.h"
@@ -20,7 +20,7 @@ class GDNetPeer : public Reference {
 	GDCLASS(GDNetPeer,Reference);
 
 	GDNetHost* _host;
-	PENetPeer* _peer;
+	_ENetPeer* _peer;
 
 protected:
 
@@ -28,7 +28,7 @@ protected:
 
 public:
 
-	GDNetPeer(GDNetHost* host, PENetPeer* peer);
+	GDNetPeer(GDNetHost* host, _ENetPeer* peer);
 	~GDNetPeer();
 
 	int get_peer_id();

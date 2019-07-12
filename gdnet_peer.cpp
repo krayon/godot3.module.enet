@@ -2,7 +2,7 @@
 
 #include "gdnet_peer.h"
 
-GDNetPeer::GDNetPeer(GDNetHost* host, PENetPeer* peer) : _host(host), _peer(peer) {
+GDNetPeer::GDNetPeer(GDNetHost* host, ENetPeer* peer) : _host(host), _peer(peer) {
 	_host->reference();
 }
 
@@ -20,7 +20,7 @@ Ref<GDNetAddress> GDNetPeer::get_address() {
 	address->set_port(_peer->address.port);
 
 	char ip[64];
-	penet_address_get_host_ip(&_peer->address, ip, 64);
+	enet_address_get_host_ip(&_peer->address, ip, 64);
 	address->set_host(ip);
 
 	return address;
@@ -36,7 +36,7 @@ void GDNetPeer::ping() {
 
 	_host->acquireMutex();
 
-	penet_peer_ping(_peer);
+	enet_peer_ping(_peer);
 
 	_host->releaseMutex();
 }
@@ -46,7 +46,7 @@ void GDNetPeer::set_ping_interval(int pingInterval) {
  
     _host->acquireMutex();
  
-    penet_peer_ping_interval(_peer, pingInterval);
+    enet_peer_ping_interval(_peer, pingInterval);
  
     _host->releaseMutex();
 }
@@ -56,7 +56,7 @@ void GDNetPeer::reset() {
 
 	_host->acquireMutex();
 
-	penet_peer_reset(_peer);
+	enet_peer_reset(_peer);
 
 	_host->releaseMutex();
 }
@@ -66,7 +66,7 @@ void GDNetPeer::peer_disconnect(int data) {
 
 	_host->acquireMutex();
 
-	penet_peer_disconnect(_peer, data);
+	enet_peer_disconnect(_peer, data);
 
 	_host->releaseMutex();
 }
@@ -76,7 +76,7 @@ void GDNetPeer::disconnect_later(int data) {
 
 	_host->acquireMutex();
 
-	penet_peer_disconnect_later(_peer, data);
+	enet_peer_disconnect_later(_peer, data);
 
 	_host->releaseMutex();
 }
@@ -86,7 +86,7 @@ void GDNetPeer::disconnect_now(int data) {
 
 	_host->acquireMutex();
 
-	penet_peer_disconnect_now(_peer, data);
+	enet_peer_disconnect_now(_peer, data);
 
 	_host->releaseMutex();
 }
@@ -132,7 +132,7 @@ void GDNetPeer::set_timeout(int limit, int min_timeout, int max_timeout) {
 
 	_host->acquireMutex();
 
-	penet_peer_timeout(_peer, limit, min_timeout, max_timeout);
+	enet_peer_timeout(_peer, limit, min_timeout, max_timeout);
 
 	_host->releaseMutex();
 }

@@ -7,7 +7,7 @@
 #include "core/variant.h"
 #include "core/io/marshalls.h"
 
-#include "penet/penet.h"
+#include "thirdparty/enet/enet/enet.h"
 
 class GDNetEvent : public Reference {
 
