@@ -182,7 +182,6 @@ Error GDNetHost::bind(Ref<GDNetAddress> addr) {
 			memset(enet_addr.host, 0, 16);
 		} else {
 			if (enet_address_set_host(&enet_addr, host_addr.get_data()) != 0) {
-				ERR_EXPLAIN("Unable to resolve host");
 				return FAILED;
 			}
 		}
@@ -217,7 +216,6 @@ Ref<GDNetPeer> GDNetHost::host_connect(Ref<GDNetAddress> addr, int data) {
 	CharString host_addr = addr->get_host().ascii();
 
 	if (enet_address_set_host(&penet_addr, host_addr.get_data()) != 0) {
-		ERR_EXPLAIN("Unable to resolve host");
 		return NULL;
 	}
 

@@ -20,7 +20,7 @@ void register_gdnet3_types() {
 	ClassDB::register_class<GDNetAddress>();
 
 	if (enet_initialize() != 0)
-		ERR_EXPLAIN("Unable to initialize PENet");
+		CRASH_NOW_MSG("Unable to initialize ENet. Can't recover.");
 }
 
 void unregister_gdnet3_types() {
