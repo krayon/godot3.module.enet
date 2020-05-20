@@ -2,8 +2,13 @@
 
 An [ENet](http://enet.bespin.org/) low level, non peer oriented abstraction for Godot 3.1
 
-GDNet for Godot 3.0: https://github.com/perdugames/gdnet3
-GDNet for Godot 2.1: https://github.com/empyreanx/gdnet
+I've updated this to Godot 3.2 on https://github.com/jakobwinkler/gdnet3 by replacing the 
+old error macros (see https://github.com/godotengine/godot/issues/31207). Also, I integrated
+the changes made in https://github.com/SimoneStorai/gdnet3 to use the enet version shipped with godot
+instead of integrating penet.
+
+ - GDNet for Godot 3.0: https://github.com/perdugames/gdnet3
+ - GDNet for Godot 2.1: https://github.com/empyreanx/gdnet
 
 ## About
 
