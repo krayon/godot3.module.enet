@@ -271,17 +271,17 @@ Ref<GDNetEvent> GDNetHost::get_event() {
 void GDNetHost::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_peer"),&GDNetHost::get_peer);
 
-	ClassDB::bind_method(D_METHOD("set_event_wait"),&GDNetHost::set_event_wait); // Deprecated
-	ClassDB::bind_method(D_METHOD("set_max_peers"),&GDNetHost::set_max_peers);
-	ClassDB::bind_method(D_METHOD("set_max_channels"),&GDNetHost::set_max_channels);
-	ClassDB::bind_method(D_METHOD("set_max_bandwidth_in"),&GDNetHost::set_max_bandwidth_in);
-	ClassDB::bind_method(D_METHOD("set_max_bandwidth_out"),&GDNetHost::set_max_bandwidth_out);
+	ClassDB::bind_method(D_METHOD("set_event_wait", "wait"),&GDNetHost::set_event_wait); // Deprecated
+	ClassDB::bind_method(D_METHOD("set_max_peers", "peers"),&GDNetHost::set_max_peers);
+	ClassDB::bind_method(D_METHOD("set_max_channels", "channels"),&GDNetHost::set_max_channels);
+	ClassDB::bind_method(D_METHOD("set_max_bandwidth_in", "bandwidth"),&GDNetHost::set_max_bandwidth_in);
+	ClassDB::bind_method(D_METHOD("set_max_bandwidth_out", "bandwidth"),&GDNetHost::set_max_bandwidth_out);
 
-	ClassDB::bind_method(D_METHOD("bind"),&GDNetHost::bind,DEFVAL(NULL));
+	ClassDB::bind_method(D_METHOD("bind", "address"),&GDNetHost::bind,DEFVAL(NULL));
 	ClassDB::bind_method(D_METHOD("unbind"),&GDNetHost::unbind);
-	ClassDB::bind_method(D_METHOD("host_connect"),&GDNetHost::host_connect,DEFVAL(0));
-	ClassDB::bind_method(D_METHOD("broadcast_packet"),&GDNetHost::broadcast_packet,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
-	ClassDB::bind_method(D_METHOD("broadcast_var"),&GDNetHost::broadcast_var,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
+	ClassDB::bind_method(D_METHOD("host_connect", "address", "data"),&GDNetHost::host_connect,DEFVAL(0));
+	ClassDB::bind_method(D_METHOD("broadcast_packet", "packet", "channel", "type"),&GDNetHost::broadcast_packet,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
+	ClassDB::bind_method(D_METHOD("broadcast_var", "var", "channel", "type"),&GDNetHost::broadcast_var,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
 	ClassDB::bind_method(D_METHOD("is_event_available"),&GDNetHost::is_event_available);
 	ClassDB::bind_method(D_METHOD("get_event_count"),&GDNetHost::get_event_count);
 	ClassDB::bind_method(D_METHOD("get_event"),&GDNetHost::get_event);

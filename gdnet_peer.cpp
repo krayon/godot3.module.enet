@@ -142,12 +142,12 @@ void GDNetPeer::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_address"), &GDNetPeer::get_address);
 	ClassDB::bind_method(D_METHOD("get_avg_rtt"), &GDNetPeer::get_avg_rtt);
 	ClassDB::bind_method(D_METHOD("ping"), &GDNetPeer::ping);
-	ClassDB::bind_method(D_METHOD("set_ping_interval"), &GDNetPeer::set_ping_interval,DEFVAL(0));
+	ClassDB::bind_method(D_METHOD("set_ping_interval", "interval"), &GDNetPeer::set_ping_interval,DEFVAL(0));
 	ClassDB::bind_method(D_METHOD("reset"), &GDNetPeer::reset);
-	ClassDB::bind_method(D_METHOD("peer_disconnect"), &GDNetPeer::peer_disconnect,DEFVAL(0));
-	ClassDB::bind_method(D_METHOD("disconnect_later"), &GDNetPeer::disconnect_later,DEFVAL(0));
-	ClassDB::bind_method(D_METHOD("disconnect_now"), &GDNetPeer::disconnect_now,DEFVAL(0));
-	ClassDB::bind_method(D_METHOD("send_packet"), &GDNetPeer::send_packet,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
-	ClassDB::bind_method(D_METHOD("send_var"), &GDNetPeer::send_var,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
-	ClassDB::bind_method(D_METHOD("set_timeout"), &GDNetPeer::set_timeout);
+	ClassDB::bind_method(D_METHOD("peer_disconnect", "data"), &GDNetPeer::peer_disconnect,DEFVAL(0));
+	ClassDB::bind_method(D_METHOD("disconnect_later", "data"), &GDNetPeer::disconnect_later,DEFVAL(0));
+	ClassDB::bind_method(D_METHOD("disconnect_now", "data"), &GDNetPeer::disconnect_now,DEFVAL(0));
+	ClassDB::bind_method(D_METHOD("send_packet", "packet", "channel", "type"), &GDNetPeer::send_packet,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
+	ClassDB::bind_method(D_METHOD("send_var", "var", "channel", "type"), &GDNetPeer::send_var,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
+	ClassDB::bind_method(D_METHOD("set_timeout", "limit", "min", "max"), &GDNetPeer::set_timeout);
 }
