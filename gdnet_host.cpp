@@ -254,6 +254,12 @@ void GDNetHost::broadcast_var(const Variant& var, int channel_id, int type) {
 
 	PoolByteArray::Write w = packet.write();
 	err = encode_variant(var, &w[0], len);
+
+	ERR_FAIL_COND(err != OK);
+
+	message->set_packet(packet);
+
+	_message_queue.push(message);
 }
 
 bool GDNetHost::is_event_available() {
