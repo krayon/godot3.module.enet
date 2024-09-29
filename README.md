@@ -1,22 +1,28 @@
 # GDNet
 
-An [ENet](http://enet.bespin.org/) low level, non peer oriented abstraction for Godot 3.1
+An [ENet](http://enet.bespin.org/) low level, non peer oriented abstraction for Godot 3.x
 
-I've updated this to Godot 3.2 on https://github.com/jakobwinkler/gdnet3 by replacing the 
-old error macros (see https://github.com/godotengine/godot/issues/31207). Also, I integrated
-the changes made in https://github.com/SimoneStorai/gdnet3 to use the enet version shipped with godot
-instead of integrating penet.
+Utilises changes made by @jakobwinkler ( https://github.com/jakobwinkler/gdnet3 ) and 
+@SimoneStorai ( https://github.com/SimoneStorai/gdnet3 ).
+
+Older versions:
 
  - GDNet for Godot 3.0: https://github.com/perdugames/gdnet3
  - GDNet for Godot 2.1: https://github.com/empyreanx/gdnet
 
 ## About
 
-[ENet](http://enet.bespin.org/) is a library that provides a number of features on top of UDP such as, connection handling, sequencing, reliability, channels, bandwidth throttling, packet fragmentation and reassembly. GDNet provides a (mostly) thin wrapper around ENet.
+[ENet](http://enet.bespin.org/) is a library that provides a number of features
+on top of UDP such as, connection handling, sequencing, reliability, channels,
+bandwidth throttling, packet fragmentation and reassembly. GDNet provides a
+(mostly) thin wrapper around ENet.
 
 ## Installation
 
-Simply drop the `gdnet` directory in your `godot/modules` directory and build for the platfom of your choice. GDNet has been verified to build on Linux (64 bit), MacOS X (32/64 bit), and Windows (32/64 bit cross-compiled using MinGW).
+Simply drop the code into a `gdnet3` directory in your `godot/modules`
+directory and build for the platfom of your choice. GDNet has been verified to
+build on Linux (64 bit), MacOS X (32/64 bit), and Windows (32/64 bit
+cross-compiled using MinGW).
 
 ## Example
 
