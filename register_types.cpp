@@ -19,8 +19,7 @@ void register_gdnet3_types() {
 	ClassDB::register_class<GDNetHost>();
 	ClassDB::register_class<GDNetAddress>();
 
-	if (enet_initialize() != 0)
-		CRASH_NOW_MSG("Unable to initialize ENet. Can't recover.");
+	ERR_FAIL_COND_MSG(enet_initialize() != 0, "Unable to initialize ENet. Can't recover.");
 }
 
 void unregister_gdnet3_types() {

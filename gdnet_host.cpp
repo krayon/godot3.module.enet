@@ -168,9 +168,7 @@ Error GDNetHost::bind(Ref<GDNetAddress> addr) {
 			// IPv6 ANY is represented by empty 128-bit buffer.
 			memset(enet_addr.host, 0, 16);
 		} else {
-			if (enet_address_set_host(&enet_addr, host_addr.get_data()) != 0) {
-				return FAILED;
-			}
+			ERR_FAIL_COND_V_MSG(enet_address_set_host(&enet_addr, host_addr.get_data()) != 0, FAILED, "Unable to resolve host");
 		}
 
 		_host = enet_host_create(&enet_addr, _max_peers, _max_channels, _max_bandwidth_in, _max_bandwidth_out);
@@ -202,9 +200,7 @@ Ref<GDNetPeer> GDNetHost::host_connect(Ref<GDNetAddress> addr, int data) {
 
 	CharString host_addr = addr->get_host().ascii();
 
-	if (enet_address_set_host(&penet_addr, host_addr.get_data()) != 0) {
-		return NULL;
-	}
+	ERR_FAIL_COND_V_MSG(enet_address_set_host(&penet_addr, host_addr.get_data()) != 0, NULL, "Unable to resolve host");
 
 	ENetPeer* peer = enet_host_connect(_host, &penet_addr, _max_channels, data);
 
