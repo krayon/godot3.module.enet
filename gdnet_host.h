@@ -87,6 +87,7 @@ public:
 	void broadcast_var(const Variant& var, int channel_id = 0, int type = GDNetMessage::UNSEQUENCED);
 
 	bool is_event_available();
+	int get_message_count();
 	int get_event_count();
 	Ref<GDNetEvent> get_event();
 };

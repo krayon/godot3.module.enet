@@ -249,6 +249,10 @@ bool GDNetHost::is_event_available() {
 	return (!_event_queue.is_empty());
 }
 
+int GDNetHost::get_message_count() {
+	return (_message_queue.size());
+}
+
 int GDNetHost::get_event_count() {
 	return (_event_queue.size());
 }
@@ -272,6 +276,7 @@ void GDNetHost::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("broadcast_packet", "packet", "channel", "type"),&GDNetHost::broadcast_packet,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
 	ClassDB::bind_method(D_METHOD("broadcast_var", "var", "channel", "type"),&GDNetHost::broadcast_var,DEFVAL(0),DEFVAL(GDNetMessage::UNSEQUENCED));
 	ClassDB::bind_method(D_METHOD("is_event_available"),&GDNetHost::is_event_available);
+	ClassDB::bind_method(D_METHOD("get_message_count"),&GDNetHost::get_message_count);
 	ClassDB::bind_method(D_METHOD("get_event_count"),&GDNetHost::get_event_count);
 	ClassDB::bind_method(D_METHOD("get_event"),&GDNetHost::get_event);
 }
