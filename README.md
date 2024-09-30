@@ -7,8 +7,10 @@ Utilises changes made by @jakobwinkler ( https://github.com/jakobwinkler/gdnet3 
 
 Older versions:
 
- - GDNet for Godot 3.0: https://github.com/perdugames/gdnet3
- - GDNet for Godot 2.1: https://github.com/empyreanx/gdnet
+ - GDNet for Godot 3.2.4: https://github.com/krayon/godot3.module.enet/tree/v3.2.4
+ - GDNet for Godot 3.2  : https://github.com/krayon/godot3.module.enet/tree/v3.2
+ - GDNet for Godot 3.0  : https://github.com/perdugames/gdnet3
+ - GDNet for Godot 2.1  : https://github.com/empyreanx/gdnet
 
 ## About
 
