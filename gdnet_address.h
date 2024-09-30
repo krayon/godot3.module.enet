@@ -19,7 +19,7 @@ protected:
 
 public:
 
-	GDNetAddress() : _port(0) { }
+	GDNetAddress() : _host(""), _port(0) { }
 
 	String get_host() const { return _host; }
 	void set_host(const String& host) { _host = host; }

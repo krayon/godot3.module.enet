@@ -20,8 +20,11 @@ Ref<GDNetAddress> GDNetPeer::get_address() {
 	address->set_port(_peer->address.port);
 
 	char ip[64];
-	enet_address_get_host_ip(&_peer->address, ip, 64);
-	address->set_host(ip);
+	if (enet_address_get_host_ip(&_peer->address, ip, 64)) {
+		address->set_host(ip);
+	} else {
+		address->set_host("");
+	}
 
 	return address;
 }
